@@ -51,20 +51,19 @@ mainModule.config(function($stateProvider, $urlRouterProvider) {
 mainModule.controller('FindPartnerCtrl', function($scope, $state, $http, partnerInfoService, $ionicPopup) {
         // create a message to display in our view
         $scope.userNum = '';
+        $scope.jsonData = {};
         $scope.buscarSocio = function(userNum){
-          var url = 'http://hostseven.lq3.net:8091/VeoCRM/webservice/call_webservice.asp?VEOCIACRC=6764O1240&USERNAME=uuuu&PASSWORD=pppp&WC=DW2.2ARED.CALL&CALL=GYMPOWER&WS=GETMEMBER&PAR01='+userNum +'&callback=JSON_CALLBACK';
-          $http.jsonp({
-            method: 'GET',
-            url: url,
+          var url = 'http://hostseven.lq3.net:8091/VeoCRM/webservice/call_webservice.asp?VEOCIACRC=6764O1240&USERNAME=uuuu&PASSWORD=pppp&WC=DW2.2ARED.CALL&CALL=GYMPOWER&WS=GETMEMBER&PAR01='+userNum;
+                  
+          $http.get(url).success(function(data){
             
-            }).success(function(data){
-              $scope.jsonData = data.responseObject;
-                partnerInfoService.setData(data.responseObject);
-                console.log('jsonData: '+partnerInfoService.getData());
+              jsonData = data;
+              console.log(jsonData.responseObject[0].ID);
+                partnerInfoService.setData(jsonData.responseObject[0]);
           });
 
 
-          
+          console.log(partnerInfoService.getData().ID);
           if(partnerInfoService.getData().numeroSocio === userNum){
 
             $state.go('partner');
