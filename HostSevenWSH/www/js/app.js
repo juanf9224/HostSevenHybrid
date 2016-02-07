@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-var mainModule = angular.module('HostSeven', ['ionic', 'FindPArtnerCtrl', 'PartnerInfoCtrl', 'RoutinesCtrl', 'ngRoute']);
+var mainModule = angular.module('hostSeven', ['ionic']);
 
 mainModule.run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -25,41 +25,115 @@ mainModule.run(function($ionicPlatform) {
 
 mainModule.config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
-  .state('intro', {
-    url: '/', 
-    //If in a folder, template/welcome.html    
-    templateUrl: 'templates/find-partner.html',
-      controller: 'FindPArtnerCtrl'
+  .state('index', {
+    url: '/index', 
+    //If in a folder, templates/welcome.html    
+    templateUrl: 'templates/find-partner.html'
   })
   
-    .state('partner-info', { 
-      url: '/templates/partner-info', 
+    .state('partner', { 
+      url: '/partner-info', 
       //If in a folder, template/login.html
-      templateUrl: 'templates/partner-info.html',
-      controller: 'PartnerInfoCtrl'
+      templateUrl: 'templates/partner-info.html'
     })
 
     .state('routines', { 
-      url: '/templates/routines', 
+      url: '/routines', 
       //If in a folder, template/login.html
-      templateUrl: 'template/routines.html',
-      controller: 'RoutinesCtrl'
+      templateUrl: 'templates/routines.html'
     })
  
 
-  $urlRouterProvider.otherwise("/");
+  $urlRouterProvider.otherwise("/index");
 })
 
 
-scotchApp.controller('FindPArtnerCtrl', function($scope) {
+mainModule.controller('FindPartnerCtrl', function($scope, $state, $http, partnerInfoService, $ionicPopup) {
         // create a message to display in our view
-        $scope.message = 'Everyone come and see how good I look!';
+        $scope.userNum = '';
+
+        $scope.buscarSocio = function(userNum){
+          
+          if(partnerInfoService.getData().numeroSocio === userNum){
+
+            $state.go('partner');
+          }else{
+              var alertPopup = $ionicPopup.alert({
+                  title: 'Error',
+                  template: 'No existe usuario con ese numero.'
+            });
+                alertPopup;
+
+            return;
+
+          }
+        }
+
+        
+
     });
 
-    scotchApp.controller('PartnerInfoCtrl', function($scope) {
+    mainModule.controller('PartnerInfoCtrl', function($scope, $state, $ionicPopup) {
         $scope.message = 'Look! I am an about page.';
+
+
+        $scope.partnerInfo = {'nombre':'prueba', 'id': 800050, 'numeroSocio': 4242};
+        $scope.days = [{'dia':'1'}, {'dia':'2'}, {'dia':'3'}];
+
+        var num = null;
+
+        $scope.rutinasDia = function(num){
+              var alertPopup = $ionicPopup.alert({
+                  title: 'Aviso',
+                  template: 'Datos del dia'+ num
+                  });
+
+            $state.go('routines');
+            
+        };
+
     });
 
-    scotchApp.controller('RoutinesCtrl', function($scope) {
+    mainModule.controller('RoutinesCtrl', function($scope, $state) {
         $scope.message = 'Contact us! JK. This is just a demo.';
+        $scope.routines = [{'grupo':'hombros', 'ejercicios': 'push ups', 'repeticiones': '12', 'series': '4'},
+        {'grupo':'hombros', 'ejercicios': 'push ups', 'repeticiones': '12', 'series': '4'},
+        {'grupo':'hombros', 'ejercicios': 'push ups', 'repeticiones': '12', 'series': '4'},
+        {'grupo':'hombros', 'ejercicios': 'push ups', 'repeticiones': '12', 'series': '4'}]
     });
+
+    mainModule.service('partnerInfoService', function(){
+      return {
+        data: {'nombre':'prueba', 'id': 800050, 'numeroSocio': 4242},
+      getData: function(){
+        return this.data;
+      },
+      setData: function(data){
+        return this.data = data;
+      }}
+    })
+
+    mainModule.service('routineDaysService', function(){
+      return {
+        data: [{'dia':'1'}, {'dia':'2'}, {'dia':'3'}],
+      getData: function(){
+        return this.data;
+      },
+      setData: function(data){
+        return this.data = data;
+      }}
+    })
+
+     mainModule.service('routinesInfoService', function(){
+      return {
+        data: [{'grupo':'hombros', 'ejercicios': 'push ups', 'repeticiones': '12', 'series': '4'},
+        {'grupo':'hombros', 'ejercicios': 'push ups', 'repeticiones': '12', 'series': '4'},
+        {'grupo':'hombros', 'ejercicios': 'push ups', 'repeticiones': '12', 'series': '4'},
+        {'grupo':'hombros', 'ejercicios': 'push ups', 'repeticiones': '12', 'series': '4'}],
+      getData: function(){
+        return this.data;
+      },
+      setData: function(data){
+        return this.data = data;
+      }}
+    })

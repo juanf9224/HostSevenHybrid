@@ -1,0 +1,35 @@
+<ion-view title="Rutinas del día ">
+    <ion-content overflow-scroll="true" padding="true" class="has-header" ng-controller="RoutinesCtrl">
+        <div class="list card">
+            <div class="item item-divider">Socio</div>
+            <div class="item item-body" ng-controller="PartnerInfoCtrl">
+            	<center><div><p>ID: {{partnerInfo.id}} </p>
+                      <br>
+                      <p>Numero: {{partnerInfo.numeroSocio}}</p>
+                        <br><p>Nombre: {{partnerInfo.nombre}}</p>
+                    </div></center>
+            </div>
+        </div>
+        <div class="spacer" style="width: 283px; height: 28px;"></div>
+        <div class="row header" style="font-size:1em;">
+        	<div class="col">
+        		<b>Grupo</b>
+        	</div>
+        	<div class="col">
+        		<b>Ejercicios</b>
+        	</div>
+        	<div class="col">
+        		<b>Repeticiones</b>
+        	</div>
+        	<div class="col">
+        		<b>Series</b>
+        	</div>
+        </div>
+        <div class="row" ng-repeat="routine in routines">
+          <div class="col" style="border:1px solid #222 !important;">{{routine.grupo}}</div>
+          <div class="col" style="border:1px solid #222 !important;">{{routine.ejercicios}}</div>
+          <div class="col" style="border:1px solid #222 !important;">{{routine.repeticiones}}</div>
+          <div class="col" style="border:1px solid #222 !important;">{{routine.series}}</div>
+        </div>
+    </ion-content>
+</ion-view>

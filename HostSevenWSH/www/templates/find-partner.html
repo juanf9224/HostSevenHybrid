@@ -1,20 +1,13 @@
-<script id="home" type="text/ng-template">
-<ion-view view-title="Home">
-<ion-pane>
-<ion-content class="center" ng-controller="FindPartnerCtrl">
-      <div class="row">
-        <div class="col">
-        <form>
-          <label class="item item-input">
-    <input type="number" placeholder="Numero de usuario">
-  </label>
-          <button type="submit"class="button button-positive button-full icon ion-start">buscar</button>
+<ion-view >
+<ion-nav-title>Buscar Socio</ion-nav-title>
+    <ion-content overflow-scroll="true" padding="true" class="has-header" ng-controller="FindPartnerCtrl">
+        <div class="spacer" style="width: 283px; height: 152px;"></div>
+        <form class="list">
+            <label class="item item-input" name="user-number">
+                <input type="number" placeholder="Numero de usuario" ng-model="userNum">
+            </label>
         </form>
-        <br>
-        {{message}}
-      </div>
-      </div>
-      </ion-content>
-</ion-pane>
+        
+        <a class="button button-positive button-block button-large icon-right ion-android-search" ng-click="buscarSocio(userNum)">Buscar</a>
+    </ion-content>
 </ion-view>
-</script>
