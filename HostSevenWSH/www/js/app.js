@@ -51,8 +51,19 @@ mainModule.config(function($stateProvider, $urlRouterProvider) {
 mainModule.controller('FindPartnerCtrl', function($scope, $state, $http, partnerInfoService, $ionicPopup) {
         // create a message to display in our view
         $scope.userNum = '';
-
         $scope.buscarSocio = function(userNum){
+          var url = 'http://hostseven.lq3.net:8091/VeoCRM/webservice/call_webservice.asp?VEOCIACRC=6764O1240&USERNAME=uuuu&PASSWORD=pppp&WC=DW2.2ARED.CALL&CALL=GYMPOWER&WS=GETMEMBER&PAR01='+userNum +'&callback=JSON_CALLBACK';
+          $http.jsonp({
+            method: 'GET',
+            url: url,
+            
+            }).success(function(data){
+              $scope.jsonData = data.responseObject;
+                partnerInfoService.setData(data.responseObject);
+                console.log('jsonData: '+partnerInfoService.getData());
+          });
+
+
           
           if(partnerInfoService.getData().numeroSocio === userNum){
 
@@ -104,7 +115,7 @@ mainModule.controller('FindPartnerCtrl', function($scope, $state, $http, partner
 
     mainModule.service('partnerInfoService', function(){
       return {
-        data: {'nombre':'prueba', 'id': 800050, 'numeroSocio': 4242},
+        data: {},
       getData: function(){
         return this.data;
       },
@@ -115,7 +126,7 @@ mainModule.controller('FindPartnerCtrl', function($scope, $state, $http, partner
 
     mainModule.service('routineDaysService', function(){
       return {
-        data: [{'dia':'1'}, {'dia':'2'}, {'dia':'3'}],
+        data: {},
       getData: function(){
         return this.data;
       },
