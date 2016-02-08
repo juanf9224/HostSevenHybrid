@@ -48,20 +48,26 @@ mainModule.config(function($stateProvider, $urlRouterProvider) {
 })
 
 
-mainModule.controller('FindPartnerCtrl', function($scope, $state, $http, partnerInfoService, $ionicPopup) {
+mainModule.controller('FindPartnerCtrl', function($scope, $state, $http, $timeout, partnerInfoService, $ionicPopup) {
         // create a message to display in our view
         $scope.userNum = '';
         $scope.jsonData = {};
         $scope.buscarSocio = function(userNum){
           var url = 'http://hostseven.lq3.net:8091/VeoCRM/webservice/call_webservice.asp?VEOCIACRC=6764O1240&USERNAME=uuuu&PASSWORD=pppp&WC=DW2.2ARED.CALL&CALL=GYMPOWER&WS=GETMEMBER&PAR01='+userNum;
                   
-          $http.get(url).success(function(data){
+           $http.get(url).success(function(data){
             
               jsonData = data;
-              console.log(jsonData.responseObject[0].ID);
                 partnerInfoService.setData(jsonData);
-                console.log(partnerInfoService.getData().responseObject[0].NumeroSocio);
-          if(partnerInfoService.getData().responseObject[0].NumeroSocio == userNum){
+                if(partnerInfoService.getData().success == false){
+                  var alertPopup = $ionicPopup.alert({
+                  title: 'Error',
+                  template: 'No existe usuario con ese numero.'
+            });
+                alertPopup;
+
+            return;
+          }else if(partnerInfoService.getData().responseObject[0].NumeroSocio == userNum){
 
             $state.go('partner');
           }else{
@@ -119,10 +125,10 @@ mainModule.controller('FindPartnerCtrl', function($scope, $state, $http, partner
 
     });
 
-    mainModule.controller('RoutinesCtrl', function($scope, $state, $http, routinesInfoService, $timeout, routineService) {
+    mainModule.controller('RoutinesCtrl', function($scope, $state, $http, partnerInfoService, routinesInfoService, $timeout, routineService) {
 
 
-        $scope.message = 'Contact us! JK. This is just a demo.';
+        $scope.partnerInfo = partnerInfoService.getData().responseObject[0];
         $scope.routines = {};
 
         var url = routinesInfoService.getData();
