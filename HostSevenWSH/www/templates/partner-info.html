@@ -4,18 +4,17 @@
             <div class="item item-divider">Socio</div>
             <div class="item item-body">
                 <div>
-                    <center><div><p>ID: {{partnerInfo.id}} </p>
+                    <center><div><p>ID: {{partnerInfo.ID}} </p>
                       <br>
-                      <p>Numero: {{partnerInfo.numeroSocio}}</p>
-                        <br><p>Nombre: {{partnerInfo.nombre}}</p>
+                      <p>Numero: {{partnerInfo.NumeroSocio}}</p>
+                        <br><p>Nombre: {{partnerInfo.Nombre}}</p>
                     </div></center>                
                   </div>
             </div>
         </div>
         <div class="spacer" style="width: 283px; height: 39px;"></div>
-        <div ng-repeat="day in days">
-          <input type="hidden" value="day" ng-model="num">
-          <a class="button button-balanced button-block  icon-left ion-information-circled" ng-click="rutinasDia({{day.dia}})">Dia {{day.dia}}</a>
+        <div ng-repeat="day in retreivedDays">
+          <a class="button button-balanced button-block  icon-left ion-information-circled" ng-click="rutinasDia({{day.DIA}})">Dia {{day.DIA}}</a>
           </div>
     </ion-content>
 </ion-view>

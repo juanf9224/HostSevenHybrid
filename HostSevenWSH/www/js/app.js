@@ -59,12 +59,9 @@ mainModule.controller('FindPartnerCtrl', function($scope, $state, $http, partner
             
               jsonData = data;
               console.log(jsonData.responseObject[0].ID);
-                partnerInfoService.setData(jsonData.responseObject[0]);
-          });
-
-
-          console.log(partnerInfoService.getData().ID);
-          if(partnerInfoService.getData().numeroSocio === userNum){
+                partnerInfoService.setData(jsonData);
+                console.log(partnerInfoService.getData().responseObject[0].NumeroSocio);
+          if(partnerInfoService.getData().responseObject[0].NumeroSocio == userNum){
 
             $state.go('partner');
           }else{
@@ -77,40 +74,79 @@ mainModule.controller('FindPartnerCtrl', function($scope, $state, $http, partner
             return;
 
           }
+          });
         }
-
-        
 
     });
 
-    mainModule.controller('PartnerInfoCtrl', function($scope, $state, $ionicPopup) {
+    mainModule.controller('PartnerInfoCtrl', function($scope, $http, $state, $ionicPopup, $timeout, partnerInfoService, routineDaysService, retreivedDaysService, routinesInfoService) {
         $scope.message = 'Look! I am an about page.';
 
 
-        $scope.partnerInfo = {'nombre':'prueba', 'id': 800050, 'numeroSocio': 4242};
-        $scope.days = [{'dia':'1'}, {'dia':'2'}, {'dia':'3'}];
+        $scope.partnerInfo = partnerInfoService.getData().responseObject[0];
+        
+        $scope.days = {};
+        $scope.partnerInfo = partnerInfoService.getData().responseObject[0];
+        var url = 'http://hostseven.lq3.net:8091/VeoCRM/webservice/call_webservice.asp?VEOCIACRC=6764O1240&USERNAME=uuuu&PASSWORD=pppp&WC=DW2.2ARED.CALL&CALL=GYMPOWER&WS=GETRUTINADAY&PAR01='+$scope.partnerInfo.ID ;
+        $http.get(url).success(function(data){
+              
+              jsonData = data;
+              console.log(jsonData.responseObject);
+              routineDaysService.setData(jsonData.responseObject);
+              for(var i=0; i<routineDaysService.getData().length; i++){
+                $scope.days = routineDaysService.getData(); 
+                retreivedDaysService.setData($scope.days);
+                 
+                
+                console.log('variable days: '+ $scope.days[i].DIA +'array de dias en retreivedDaysService: '+retreivedDaysService.getData()[i].DIA);              
+              }
+              
+          });
 
-        var num = null;
+          $timeout(function(){
+     $scope.retreivedDays = retreivedDaysService.getData();
+          console.log('Dia: '+$scope.retreivedDays[0].DIA);
+  }, 2000);
+         
 
         $scope.rutinasDia = function(num){
-              var alertPopup = $ionicPopup.alert({
-                  title: 'Aviso',
-                  template: 'Datos del dia'+ num
-                  });
-
-            $state.go('routines');
+          var url='http://hostseven.lq3.net:8091/VeoCRM/webservice/call_webservice.asp?VEOCIACRC=6764O1240&USERNAME=uuuu&PASSWORD=pppp&WC=DW2.2ARED.CALL&CALL=GYMPOWER&WS=GETRUTINA&PAR01='+$scope.partnerInfo.ID +'&PAR02='+num;
+          console.log(url);
+          routinesInfoService.setData(url);
+              $state.go('routines');
             
         };
 
     });
 
-    mainModule.controller('RoutinesCtrl', function($scope, $state) {
+    mainModule.controller('RoutinesCtrl', function($scope, $state, $http, routinesInfoService, $timeout, routineService) {
+
+
         $scope.message = 'Contact us! JK. This is just a demo.';
-        $scope.routines = [{'grupo':'hombros', 'ejercicios': 'push ups', 'repeticiones': '12', 'series': '4'},
-        {'grupo':'hombros', 'ejercicios': 'push ups', 'repeticiones': '12', 'series': '4'},
-        {'grupo':'hombros', 'ejercicios': 'push ups', 'repeticiones': '12', 'series': '4'},
-        {'grupo':'hombros', 'ejercicios': 'push ups', 'repeticiones': '12', 'series': '4'}]
+        $scope.routines = {};
+
+        var url = routinesInfoService.getData();
+        console.log(url);
+    
+    $http.get(url).success(function(data){
+              
+              jsonData = data;
+              console.log(jsonData.responseObject);
+              routineService.setData(jsonData.responseObject);
+              for(var i=0; i<routineService.getData().length; i++){
+                $scope.routines = routineService.getData(); 
+                
+                console.log('routine: '+ $scope.routines);              
+              }
+              
+          });
+
+          $timeout(function(){
+          console.log('rutina: '+$scope.routines[0].Grupo);
+  }, 2000);
     });
+
+
 
     mainModule.service('partnerInfoService', function(){
       return {
@@ -134,12 +170,21 @@ mainModule.controller('FindPartnerCtrl', function($scope, $state, $http, partner
       }}
     })
 
+    mainModule.service('retreivedDaysService', function(){
+      return {
+        data: {},
+        getData: function(){
+          return this.data;
+        },
+        setData: function(data){
+          return this.data = data;
+        }
+      }
+    })
+
      mainModule.service('routinesInfoService', function(){
       return {
-        data: [{'grupo':'hombros', 'ejercicios': 'push ups', 'repeticiones': '12', 'series': '4'},
-        {'grupo':'hombros', 'ejercicios': 'push ups', 'repeticiones': '12', 'series': '4'},
-        {'grupo':'hombros', 'ejercicios': 'push ups', 'repeticiones': '12', 'series': '4'},
-        {'grupo':'hombros', 'ejercicios': 'push ups', 'repeticiones': '12', 'series': '4'}],
+        data: {},
       getData: function(){
         return this.data;
       },
@@ -147,3 +192,15 @@ mainModule.controller('FindPartnerCtrl', function($scope, $state, $http, partner
         return this.data = data;
       }}
     })
+
+     mainModule.service('routineService', function(){
+      return { 
+        data:{},
+        getData: function(){
+          return this.data;
+        },
+        setData: function(data){
+          return this.data = data;
+        }
+    }
+     })
