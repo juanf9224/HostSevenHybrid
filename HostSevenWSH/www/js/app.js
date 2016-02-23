@@ -4,24 +4,8 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 var mainModule = angular.module('hostSeven', ['ionic']);
+var serviceCall = "http://hostseven.lq3.net:8091/VeoCRM/webservice/call_webservice.asp?VEOCIACRC=6764O1240&USERNAME=uuuu&PASSWORD=pppp&WC=DW2.2ARED.CALL&CALL=";
 
-mainModule.run(function($ionicPlatform) {
-  $ionicPlatform.ready(function() {
-    if(window.cordova && window.cordova.plugins.Keyboard) {
-      // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-      // for form inputs)
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-
-      // Don't remove this line unless you know what you are doing. It stops the viewport
-      // from snapping when text inputs are focused. Ionic handles this internally for
-      // a much nicer keyboard experience.
-      cordova.plugins.Keyboard.disableScroll(true);
-    }
-    if(window.StatusBar) {
-      StatusBar.styleDefault();
-    }
-  });
-})
 
 mainModule.config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
@@ -53,7 +37,7 @@ mainModule.controller('FindPartnerCtrl', function($scope, $state, $http, $timeou
         $scope.userNum = '';
         $scope.jsonData = {};
         $scope.buscarSocio = function(userNum){
-          var url = 'http://hostseven.lq3.net:8091/VeoCRM/webservice/call_webservice.asp?VEOCIACRC=6764O1240&USERNAME=uuuu&PASSWORD=pppp&WC=DW2.2ARED.CALL&CALL=GYMPOWER&WS=GETMEMBER&PAR01='+userNum;
+          var url = serviceCall + 'GYMPOWER&WS=GETMEMBER&PAR01='+userNum;
                   
            $http.get(url).success(function(data){
             
@@ -80,7 +64,14 @@ mainModule.controller('FindPartnerCtrl', function($scope, $state, $http, $timeou
             return;
 
           }
-          });
+          })
+           .catch(function (e){
+            var alertPopup = $ionicPopup.alert({
+                  title: 'Error',
+                  template: 'Error en la peticion.'+e.toString()
+            });
+                alertPopup;
+           });
         }
 
     });
@@ -93,7 +84,7 @@ mainModule.controller('FindPartnerCtrl', function($scope, $state, $http, $timeou
         
         $scope.days = {};
         $scope.partnerInfo = partnerInfoService.getData().responseObject[0];
-        var url = 'http://hostseven.lq3.net:8091/VeoCRM/webservice/call_webservice.asp?VEOCIACRC=6764O1240&USERNAME=uuuu&PASSWORD=pppp&WC=DW2.2ARED.CALL&CALL=GYMPOWER&WS=GETRUTINADAY&PAR01='+$scope.partnerInfo.ID ;
+        var url = serviceCall + 'GYMPOWER&WS=GETRUTINADAY&PAR01='+$scope.partnerInfo.ID ;
         $http.get(url).success(function(data){
               
               jsonData = data;
@@ -107,7 +98,14 @@ mainModule.controller('FindPartnerCtrl', function($scope, $state, $http, $timeou
                 console.log('variable days: '+ $scope.days[i].DIA +'array de dias en retreivedDaysService: '+retreivedDaysService.getData()[i].DIA);              
               }
               
-          });
+          })
+        .catch(function (e){
+            var alertPopup = $ionicPopup.alert({
+                  title: 'Error',
+                  template: 'Error en la peticion.'+e.toString()
+            });
+                alertPopup;
+           });;
 
           $timeout(function(){
      $scope.retreivedDays = retreivedDaysService.getData();
@@ -116,7 +114,7 @@ mainModule.controller('FindPartnerCtrl', function($scope, $state, $http, $timeou
          
 
         $scope.rutinasDia = function(num){
-          var url='http://hostseven.lq3.net:8091/VeoCRM/webservice/call_webservice.asp?VEOCIACRC=6764O1240&USERNAME=uuuu&PASSWORD=pppp&WC=DW2.2ARED.CALL&CALL=GYMPOWER&WS=GETRUTINA&PAR01='+$scope.partnerInfo.ID +'&PAR02='+num;
+          var url=serviceCall + 'GYMPOWER&WS=GETRUTINA&PAR01='+$scope.partnerInfo.ID +'&PAR02='+num;
           console.log(url);
           routinesInfoService.setData(url);
               $state.go('routines');
@@ -145,7 +143,14 @@ mainModule.controller('FindPartnerCtrl', function($scope, $state, $http, $timeou
                 console.log('routine: '+ $scope.routines);              
               }
               
-          });
+          })
+    .catch(function (e){
+            var alertPopup = $ionicPopup.alert({
+                  title: 'Error',
+                  template: 'Error en la peticion.'+e.toString()
+            });
+                alertPopup;
+           });;
 
           $timeout(function(){
           console.log('rutina: '+$scope.routines[0].Grupo);

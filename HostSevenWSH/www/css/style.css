@@ -1,18 +1,19 @@
-body{
-	background-color:#336633 ;
-}
-
-.full-width{
-	width:100%;
-	text-align:center;	
-}
-
-.center{
-	margin-right:auto;
-	margin-left:auto;
-	display:block;
+.card-font-style p{
+	font-size:20px !important;
 }
 
 
+.header .col {
+  background-color:lightgrey;
+}
 
+.row {
+	border-collapse: collapse;
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
 

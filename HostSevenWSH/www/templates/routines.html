@@ -3,7 +3,7 @@
         <div class="list card">
             <div class="item item-divider">Socio</div>
             <div class="item item-body" ng-controller="PartnerInfoCtrl">
-            	<center><div><p>ID: {{partnerInfo.ID}} </p>
+            	<center><div class="card-font-style"><p>ID: {{partnerInfo.ID}} </p>
                       <br>
                       <p>Numero: {{partnerInfo.NumeroSocio}}</p>
                         <br><p>Nombre: {{partnerInfo.Nombre}}</p>
@@ -11,7 +11,7 @@
             </div>
         </div>
         <div class="spacer" style="width: 283px; height: 28px;"></div>
-        <div class="row header" style="font-size:1em;">
+        <div class="row header">
         	<div class="col">
         		<b>Grupo</b>
         	</div>
@@ -26,10 +26,10 @@
         	</div>
         </div>
         <div class="row" ng-repeat="routine in routines">
-          <div class="col" style="border:1px solid #222 !important;">{{routine.Grupo}}</div>
-          <div class="col" style="border:1px solid #222 !important;">{{routine.DescripcionMaquina}}</div>
-          <div class="col" style="border:1px solid #222 !important;">{{routine.Series}}</div>
-          <div class="col" style="border:1px solid #222 !important;">{{routine.Repeticiones}}</div>
+          <div class="col">{{routine.Grupo}}</div>
+          <div class="col">{{routine.DescripcionMaquina}}</div>
+          <div class="col">{{routine.Series}}</div>
+          <div class="col">{{routine.Repeticiones}}</div>
         </div>
     </ion-content>
 </ion-view>
